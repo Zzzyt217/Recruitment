@@ -1,0 +1,23 @@
+create database recruitment;     -- 注册登录数据库
+use recruitment;
+CREATE TABLE users(
+	id    int primary key,
+	username      varchar(50) ,
+	eemail       varchar(50),
+    password       varchar(50) ,
+    role           varchar(50)
+) engine=innodb ;
+
+create database jobseekers; -- 求职者简历数据库
+use jobseekers;
+CREATE TABLE resume (
+    id INT PRIMARY KEY AUTO_INCREMENT,          -- 简历的唯一ID
+    user_id INT UNIQUE NOT NULL,                -- 关联 auth-service 中的用户ID，INT 类型，UNIQUE 确保一个用户只有一份主简历
+    email VARCHAR(50) NOT NULL,                 -- 存储用户注册邮箱 (注意：这里我使用了 VARCHAR(50) 对应你 users 表中的 eemail 字段长度)
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    desired_position VARCHAR(255),
+    education TEXT,
+    experience TEXT,
+    skills TEXT
+);
