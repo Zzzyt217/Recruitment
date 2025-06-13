@@ -12,7 +12,7 @@ public interface UsersMapper {
     @Select("SELECT * FROM users")
     Users findAll();
 
-    @Select("SELECT * FROM users WHERE eemail = #{email}")
+    @Select("SELECT * FROM users WHERE eemail = #{eemail}")
     Users findByEmail(String email);
 
     @Insert("INSERT INTO users(username, eemail, password, role) VALUES(#{username}, #{eemail}, #{password}, #{role})")

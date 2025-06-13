@@ -40,6 +40,7 @@ public class LoginController {
     @ResponseBody
     public Map<String, Object> getUserInfo(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         Map<String, Object> result = new HashMap<>();
+        System.out.println("AuthService received Authorization: " + authHeader);
         
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
@@ -93,6 +94,7 @@ public class LoginController {
                         .setSubject(user.getUsername())
                         .claim("role", user.getRole())
                         .claim("id", user.getId())
+                        .claim("eemail", user.getEemail())
                         .setIssuedAt(new Date())
                         .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1天
                         .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

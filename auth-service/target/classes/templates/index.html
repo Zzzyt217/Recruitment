@@ -436,6 +436,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+    // 设置axios全局请求头，确保在index页面也生效
+    axios.interceptors.request.use(function (config) {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers['Authorization'] = 'Bearer ' + token;
+        }
+        return config;
+    }, function (error) {
+        return Promise.reject(error);
+    });
+
     // 显示当前日期
     const dateElement = document.getElementById('current-date');
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -593,6 +604,21 @@
                 window.location.href = '/auth/login';
             });
     });
+
+    // 添加"我的简历"ajax跳转
+    const resumeLink = document.getElementById('resumeLink');
+    if (resumeLink) {
+        resumeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            axios.get('/jobseeker/resume')
+                .then(response => {
+                    document.open();
+                    document.write(response.data);
+                    document.close();
+                    history.pushState({}, '', '/jobseeker/resume'); // 更新URL
+                })
+        });
+    }
 </script>
 </body>
 </html> 

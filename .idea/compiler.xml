@@ -16,6 +16,7 @@
         <module name="Eureka" />
         <module name="resume-service" />
         <module name="user-service" />
+        <module name="jobseekers-service" />
         <module name="auth-service" />
         <module name="recruitment-service" />
       </profile>
@@ -30,6 +31,7 @@
       <module name="eureka-server" target="1.8" />
       <module name="gateway-service" target="1.8" />
       <module name="jobseeker-service" target="1.8" />
+      <module name="jobseekers-service" target="1.8" />
       <module name="recruitment-service" target="1.8" />
       <module name="Recruitment_system" target="1.8" />
       <module name="resume-service" target="1.8" />
@@ -48,6 +50,7 @@
       <module name="eureka-server" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="jobseeker-service" options="-parameters" />
+      <module name="jobseekers-service" options="-parameters" />
       <module name="recruitment-service" options="-parameters" />
       <module name="resume-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
