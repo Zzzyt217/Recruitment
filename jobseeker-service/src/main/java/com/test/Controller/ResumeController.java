@@ -1,5 +1,6 @@
 package com.test.Controller;
 
+import com.test.Client.ResumeClient;
 import com.test.Mapper.ResumeMapper;
 import com.test.Pojo.Resume;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,23 @@ public class ResumeController {
     
     @Resource
     private ResumeMapper resumeMapper;
+    
+    @Resource
+    private ResumeClient resumeClient;
 
     @GetMapping("/resume")
     public String resume() {
         return "resume";
+    }
+
+    @GetMapping("/profile")
+    public String profile(HttpServletRequest request) {
+        // 获取userId，如果没有则重定向到登录页
+        String userIdStr = request.getHeader("userId");
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            return "redirect:/auth/login";
+        }
+        return "profile";
     }
 
     @PostMapping("/api/resume/save")
@@ -78,6 +92,7 @@ public class ResumeController {
             
             // 查找用户是否已经有简历
             Resume existingResume = resumeMapper.findByUserId(userId);
+            Resume resume;
 
             if (existingResume != null) {
                 // 更新现有简历
@@ -87,29 +102,45 @@ public class ResumeController {
                 existingResume.setEducation(education != null ? education : "");
                 existingResume.setExperience(experience != null ? experience : "");
                 existingResume.setSkills(skills != null ? skills : "");
-                // email和userId不更新，因为它们是用户标识
                 resumeMapper.updateResume(existingResume);
+                resume = existingResume;
                 result.put("success", true);
                 result.put("message", "简历更新成功");
             } else {
                 // 插入新简历
-                Resume newResume = new Resume();
-                newResume.setUserId(userId);
-                newResume.setEmail(email);
-                newResume.setName(name);
-                newResume.setPhone(phone != null ? phone : "");
-                newResume.setDesiredPosition(desiredPosition != null ? desiredPosition : "");
-                newResume.setEducation(education != null ? education : "");
-                newResume.setExperience(experience != null ? experience : "");
-                newResume.setSkills(skills != null ? skills : "");
-                resumeMapper.insertResume(newResume);
+                resume = new Resume();
+                resume.setUserId(userId);
+                resume.setEmail(email);
+                resume.setName(name);
+                resume.setPhone(phone != null ? phone : "");
+                resume.setDesiredPosition(desiredPosition != null ? desiredPosition : "");
+                resume.setEducation(education != null ? education : "");
+                resume.setExperience(experience != null ? experience : "");
+                resume.setSkills(skills != null ? skills : "");
+                resumeMapper.insertResume(resume);
                 result.put("success", true);
                 result.put("message", "简历保存成功");
             }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            result.put("success", false);
-            result.put("message", "用户ID格式错误");
+            
+            // 同步到简历管理服务
+            try {
+                Map<String, Object> syncData = new HashMap<>();
+                syncData.put("userId", userIdStr);
+                syncData.put("title", resume.getName() + "的简历");
+                syncData.put("baseInfoId", resume.getId());
+                syncData.put("education", resume.getEducation());
+                syncData.put("experience", resume.getExperience());
+                syncData.put("skills", resume.getSkills());
+                
+                System.out.println("正在同步简历数据到Resume Service: " + syncData);
+                Map<String, Object> syncResult = resumeClient.syncResume(syncData);
+                System.out.println("简历同步结果：" + syncResult);
+            } catch (Exception e) {
+                System.err.println("简历同步失败：" + e.getMessage());
+                e.printStackTrace();
+                // 这里我们不影响主流程，即使同步失败也返回成功
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             result.put("success", false);
@@ -117,4 +148,5 @@ public class ResumeController {
         }
         return result;
     }
+
 } 

@@ -12,7 +12,6 @@
         <module>recruitment-service</module>
         <module>analytics-service</module>
         <module>gateway-service</module>
-        <module>jobseekers-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

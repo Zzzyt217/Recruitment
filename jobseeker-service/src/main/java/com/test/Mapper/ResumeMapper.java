@@ -1,16 +1,13 @@
 package com.test.Mapper;
 
 import com.test.Pojo.Resume;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface ResumeMapper {
     // 插入新的简历
     @Insert("INSERT INTO resume(user_id, email, name, phone, desired_position, education, experience, skills) VALUES(#{userId}, #{email}, #{name}, #{phone}, #{desiredPosition}, #{education}, #{experience}, #{skills})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertResume(Resume resume);
 
     // 根据userId查找简历
