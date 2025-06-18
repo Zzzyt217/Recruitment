@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/resumes")
 public class ResumeController {
-    
+
     @Resource
     private ResumeService resumeService;
 
@@ -27,4 +27,4 @@ public class ResumeController {
         }
         return result;
     }
-} 
+}

@@ -402,7 +402,7 @@
 
                 <form id="resumeForm" method="post" action="/jobseeker/api/resume/save">
                     <input type="hidden" id="tokenField" name="token">
-                    
+
                     <div class="form-group">
                         <label for="name">姓名:</label>
                         <input type="text" id="name" name="name" required>
@@ -446,23 +446,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('resumeForm');
-            
+
             form.addEventListener('submit', function(e) {
                 e.preventDefault(); // 阻止表单默认提交
-                
+
                 // 获取表单数据
                 const formData = new FormData(form);
-                
+
                 // 获取JWT令牌
                 const token = getToken();
                 console.log('Token:', token ? 'Found (length: ' + token.length + ')' : 'Not found');
-                
+
                 if (!token) {
                     alert('未找到登录令牌，请先登录！');
                     window.location.href = '/auth/login';
                     return;
                 }
-                
+
                 // 使用XMLHttpRequest发送
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', '/jobseeker/api/resume/save', true);
@@ -499,16 +499,16 @@
                 };
                 xhr.send(formData);
             });
-            
+
             // 获取token并设置到隐藏字段
             const token = getToken();
             document.getElementById('tokenField').value = token;
-            
+
             if (!token) {
                 alert('未找到登录令牌，请先登录！');
                 window.location.href = '/auth/login';
             }
-            
+
             // 从localStorage获取JWT令牌
             function getToken() {
                 // 优先从localStorage获取
@@ -516,7 +516,7 @@
                 if (localToken) {
                     return localToken;
                 }
-                
+
                 // 如果localStorage中没有，尝试从Cookie获取
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
@@ -525,11 +525,11 @@
                         return cookie.substring('token='.length, cookie.length);
                     }
                 }
-                
+
                 // 如果都没有，尝试从sessionStorage获取
                 return sessionStorage.getItem('token');
             }
         });
     </script>
 </body>
-</html> 
+</html>

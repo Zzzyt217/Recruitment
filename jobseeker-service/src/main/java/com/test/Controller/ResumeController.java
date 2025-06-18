@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +18,10 @@ import java.util.Map;
 @Controller
 @CrossOrigin // 添加CORS支持
 public class ResumeController {
-    
+
     @Resource
     private ResumeMapper resumeMapper;
-    
+
     @Resource
     private ResumeClient resumeClient;
 
@@ -30,12 +31,35 @@ public class ResumeController {
     }
 
     @GetMapping("/profile")
-    public String profile(HttpServletRequest request) {
-        // 获取userId，如果没有则重定向到登录页
+    public String profile(HttpServletRequest request, Model model) {
+        // 获取Authorization header
+        String authHeader = request.getHeader("Authorization");
         String userIdStr = request.getHeader("userId");
-        if (userIdStr == null || userIdStr.isEmpty()) {
+        
+        // 验证token
+        if (authHeader == null || !authHeader.startsWith("Bearer ") || userIdStr == null || userIdStr.isEmpty()) {
             return "redirect:/auth/login";
         }
+
+        try {
+            // 获取用户简历信息
+            Integer userId = Integer.parseInt(userIdStr);
+            Resume resume = resumeMapper.findByUserId(userId);
+            
+            // 如果没有找到简历信息，创建一个空的Resume对象
+            if (resume == null) {
+                resume = new Resume();
+                resume.setUserId(userId);
+            }
+            
+            // 将resume对象添加到model中
+            model.addAttribute("resume", resume);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/auth/login";
+        }
+        
         return "profile";
     }
 
@@ -51,7 +75,7 @@ public class ResumeController {
             @RequestParam(value = "skills", required = false) String skills) {
 
         Map<String, Object> result = new HashMap<>();
-        
+
         // 打印所有请求头
         System.out.println("=========== 请求头信息 ===========");
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -59,27 +83,27 @@ public class ResumeController {
             String headerName = headerNames.nextElement();
             System.out.println(headerName + ": " + request.getHeader(headerName));
         }
-        
+
         // 获取userId和email
         String userIdStr = request.getHeader("userId");
         String email = request.getHeader("X-User-Email");
 
         System.out.println("userId: " + userIdStr);
         System.out.println("email: " + email);
-        
+
         // 打印所有请求参数
         System.out.println("=========== 表单参数 ===========");
         request.getParameterMap().forEach((key, value) -> {
             System.out.println(key + ": " + (value.length > 0 ? value[0] : ""));
         });
-        
+
         // 检查用户ID
         if (userIdStr == null || email == null || email.isEmpty()) {
             result.put("success", false);
             result.put("message", "用户信息缺失，请重新登录");
             return result;
         }
-        
+
         // 检查必填字段
         if (name == null || name.isEmpty()) {
             result.put("success", false);
@@ -89,7 +113,7 @@ public class ResumeController {
 
         try {
             Integer userId = Integer.parseInt(userIdStr);
-            
+
             // 查找用户是否已经有简历
             Resume existingResume = resumeMapper.findByUserId(userId);
             Resume resume;
@@ -121,7 +145,7 @@ public class ResumeController {
                 result.put("success", true);
                 result.put("message", "简历保存成功");
             }
-            
+
             // 同步到简历管理服务
             try {
                 Map<String, Object> syncData = new HashMap<>();
@@ -131,7 +155,7 @@ public class ResumeController {
                 syncData.put("education", resume.getEducation());
                 syncData.put("experience", resume.getExperience());
                 syncData.put("skills", resume.getSkills());
-                
+
                 System.out.println("正在同步简历数据到Resume Service: " + syncData);
                 Map<String, Object> syncResult = resumeClient.syncResume(syncData);
                 System.out.println("简历同步结果：" + syncResult);
@@ -140,7 +164,7 @@ public class ResumeController {
                 e.printStackTrace();
                 // 这里我们不影响主流程，即使同步失败也返回成功
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             result.put("success", false);

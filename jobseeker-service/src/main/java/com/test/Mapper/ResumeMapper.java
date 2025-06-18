@@ -11,7 +11,7 @@ public interface ResumeMapper {
     int insertResume(Resume resume);
 
     // 根据userId查找简历
-    @Select("SELECT id, user_id, email, name, phone, desired_position, education, experience, skills FROM resume WHERE user_id = #{userId}")
+    @Select("SELECT id, user_id, email, name, phone, desired_position as desiredPosition, education, experience, skills FROM resume WHERE user_id = #{userId}")
     Resume findByUserId(@Param("userId") Integer userId);
 
     // 更新简历

@@ -5,10 +5,10 @@ import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface ResumeMapper {
-    
+
     @Select("SELECT * FROM resumes WHERE user_id = #{userId} AND base_info_id = #{baseInfoId}")
-    Resume findByUserIdAndBaseInfoId(@Param("userId") Integer userId, 
-                                   @Param("baseInfoId") Integer baseInfoId);
+    Resume findByUserIdAndBaseInfoId(@Param("userId") Integer userId,
+                                     @Param("baseInfoId") Integer baseInfoId);
 
     @Insert("INSERT INTO resumes(user_id, title, base_info_id, education, experience, skills, status, is_public) " +
             "VALUES(#{userId}, #{title}, #{baseInfoId}, #{education}, #{experience}, #{skills}, #{status}, #{isPublic})")

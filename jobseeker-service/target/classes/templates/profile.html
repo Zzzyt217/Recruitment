@@ -276,20 +276,11 @@
     <div class="container">
         <!-- 个人信息卡片 -->
         <div class="profile-card">
-            <div class="profile-header">
+            <!-- 基本信息部分 -->
+            <div class="profile-section">
                 <div class="profile-avatar">
                     <i class="fas fa-user"></i>
                 </div>
-                <div class="profile-info">
-                    <h1 th:text="${resume.name}">用户姓名</h1>
-                    <p><i class="fas fa-envelope"></i> <span th:text="${resume.email}">邮箱地址</span></p>
-                    <p><i class="fas fa-phone"></i> <span th:text="${resume.phone}">电话号码</span></p>
-                    <p><i class="fas fa-briefcase"></i> <span th:text="${resume.desiredPosition}">期望职位</span></p>
-                </div>
-            </div>
-
-            <!-- 基本信息部分 -->
-            <div class="profile-section">
                 <h2>基本信息</h2>
                 <div class="info-grid">
                     <div class="info-item">
@@ -335,129 +326,11 @@
                 </div>
             </div>
 
-            <!-- 编辑按钮 -->
-            <a href="/jobseeker/resume" class="edit-button">
-                <i class="fas fa-edit"></i>
-                编辑信息
-            </a>
         </div>
     </div>
 
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取token并验证
-            const token = getToken();
-            console.log('Token:', token ? 'Found (length: ' + token.length + ')' : 'Not found');
-            
-            if (!token) {
-                alert('未找到登录令牌，请先登录！');
-                window.location.href = '/auth/login';
-                return;
-            }
-
-            // 从localStorage获取JWT令牌
-            function getToken() {
-                // 优先从localStorage获取
-                const localToken = localStorage.getItem('token');
-                if (localToken) {
-                    return localToken;
-                }
-            }
-
-            // 发送请求获取个人信息
-            function loadProfileData() {
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', '/jobseeker/api/resume/profile', true);
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        try {
-                            const data = JSON.parse(xhr.responseText);
-                            if (data.success) {
-                                // 更新页面数据
-                                updateProfileUI(data.resume);
-                            } else {
-                                if (data.message.includes('请重新登录')) {
-                                    window.location.href = '/auth/login';
-                                } else {
-                                    alert('获取数据失败: ' + data.message);
-                                }
-                            }
-                        } catch (error) {
-                            console.error('JSON解析错误:', error);
-                            alert('服务器响应格式错误');
-                        }
-                    } else {
-                        console.error('HTTP状态码:', xhr.status);
-                        if (xhr.status === 401 || xhr.status === 403) {
-                            console.log('认证失败，重定向到登录页面');
-                            window.location.href = '/auth/login';
-                        } else {
-                            alert('发生错误，HTTP状态码: ' + xhr.status);
-                        }
-                    }
-                };
-                
-                xhr.onerror = function() {
-                    console.error('请求发送失败');
-                    alert('网络错误，请稍后重试');
-                };
-                
-                xhr.send();
-            }
-
-            // 更新页面UI
-            function updateProfileUI(resume) {
-                // 更新头像
-                if (resume.name) {
-                    const firstChar = resume.name.charAt(0).toUpperCase();
-                    document.querySelector('.profile-avatar').textContent = firstChar;
-                }
-
-                // 更新基本信息
-                document.querySelector('.profile-info h1').textContent = resume.name || '未设置';
-                document.querySelector('.profile-info p:nth-child(2) span').textContent = resume.email || '未设置';
-                document.querySelector('.profile-info p:nth-child(3) span').textContent = resume.phone || '未设置';
-                document.querySelector('.profile-info p:nth-child(4) span').textContent = resume.desiredPosition || '未设置';
-
-                // 更新详细信息
-                document.querySelector('.info-grid .info-item:nth-child(1) span').textContent = resume.name || '未设置';
-                document.querySelector('.info-grid .info-item:nth-child(2) span').textContent = resume.phone || '未设置';
-                document.querySelector('.info-grid .info-item:nth-child(3) span').textContent = resume.email || '未设置';
-                document.querySelector('.info-grid .info-item:nth-child(4) span').textContent = resume.desiredPosition || '未设置';
-
-                // 更新教育经历
-                document.querySelector('.profile-section:nth-child(3) .info-item span').textContent = resume.education || '暂无教育经历';
-
-                // 更新工作经验
-                document.querySelector('.profile-section:nth-child(4) .info-item span').textContent = resume.experience || '暂无工作经验';
-
-                // 更新技能标签
-                const skillsContainer = document.querySelector('.skills-list');
-                skillsContainer.innerHTML = ''; // 清空现有标签
-                if (resume.skills) {
-                    const skills = resume.skills.split(',');
-                    skills.forEach(skill => {
-                        if (skill.trim()) {
-                            const skillTag = document.createElement('div');
-                            skillTag.className = 'skill-tag';
-                            skillTag.textContent = skill.trim();
-                            skillsContainer.appendChild(skillTag);
-                        }
-                    });
-                } else {
-                    const noSkillTag = document.createElement('div');
-                    noSkillTag.className = 'skill-tag';
-                    noSkillTag.textContent = '暂无技能标签';
-                    skillsContainer.appendChild(noSkillTag);
-                }
-            }
-
-            // 加载个人信息数据
-            loadProfileData();
-        });
     </script>
 </body>
 </html> 

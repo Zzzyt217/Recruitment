@@ -395,7 +395,7 @@
             <i class="fas fa-search card-icon"></i>
             <h2><i class="fas fa-search"></i> 职位搜索</h2>
             <p>浏览最新职位列表，根据技能、地点和薪资范围筛选理想工作。</p>
-            <a href="#" class="card-action">搜索职位</a>
+            <a href="/jobseeker/jobs" class="card-action" id="findpostion">搜索职位</a>
         </div>
         <div class="card animate delay-2">
             <i class="fas fa-file-alt card-icon"></i>
@@ -423,6 +423,13 @@
             <a href="#" class="card-action" id="talentLink">浏览人才</a>
         </div>
         <div class="card animate delay-2">
+            <i class="fas fa-building card-icon"></i>
+            <h2><i class="fas fa-building"></i> 企业中心</h2>
+            <p>企业用户可以查看和修改企业基本信息。</p>
+            <br>
+            <a href="/company/profile" class="card-action" id="companyProfileLink">企业信息</a>
+        </div>
+        <div class="card animate delay-3">
             <i class="fas fa-chart-line card-icon"></i>
             <h2><i class="fas fa-chart-line"></i> 招聘分析</h2>
             <p>企业用户可以查看职位发布效果，申请转化率和招聘漏斗数据分析。</p>
@@ -496,6 +503,7 @@
                     document.getElementById('talentLink').parentElement.style.display = 'none';
                     document.getElementById('analyticsLink').parentElement.style.display = 'none';
                 } else if (payload.role === '企业') {
+                    document.getElementById('findpostion').parentElement.style.display = 'none';
                     document.getElementById('resumeLink').parentElement.style.display = 'none';
                     document.getElementById('applicationsLink').parentElement.style.display = 'none';
                 }
@@ -618,6 +626,112 @@
                     document.close();
                     history.pushState({}, '', '/jobseeker/resume'); // 更新URL
                 })
+        });
+    }
+
+    // 添加"个人信息"跳转
+    const findResumeLink = document.getElementById('findresume');
+    if (findResumeLink) {
+        findResumeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 从JWT中获取用户ID
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('请先登录！');
+                window.location.href = '/auth/login';
+                return;
+            }
+
+            try {
+                // 解析JWT获取用户ID
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join('')));
+
+                // 使用axios发送请求，带上userId和token
+                axios.get('/jobseeker/profile', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'userId': payload.id
+                    }
+                })
+                .then(response => {
+                    // 直接将响应内容写入文档
+                    document.open();
+                    document.write(response.data);
+                    document.close();
+                    // 更新URL
+                    history.pushState({}, '', '/jobseeker/profile');
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 401) {
+                        alert('认证失败，请重新登录');
+                        window.location.href = '/auth/login';
+                    } else {
+                        alert('访问个人信息页面失败：' + error.message);
+                    }
+                });
+            } catch (error) {
+                console.error('JWT解析失败:', error);
+                alert('登录信息无效，请重新登录');
+                window.location.href = '/auth/login';
+            }
+        });
+    }
+
+    // 添加职位搜索链接处理
+    const findPositionLink = document.getElementById('findpostion');
+    if (findPositionLink) {
+        findPositionLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 从JWT中获取用户ID
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('请先登录！');
+                window.location.href = '/auth/login';
+                return;
+            }
+
+            try {
+                // 解析JWT获取用户ID
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join('')));
+
+                // 使用axios发送请求，带上userId和token
+                axios.get('/jobseeker/jobs', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'userId': payload.id
+                    }
+                })
+                .then(response => {
+                    // 直接将响应内容写入文档
+                    document.open();
+                    document.write(response.data);
+                    document.close();
+                    // 更新URL
+                    history.pushState({}, '', '/jobseeker/jobs');
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 401) {
+                        alert('认证失败，请重新登录');
+                        window.location.href = '/auth/login';
+                    } else {
+                        alert('访问职位搜索页面失败：' + error.message);
+                    }
+                });
+            } catch (error) {
+                console.error('JWT解析失败:', error);
+                alert('登录信息无效，请重新登录');
+                window.location.href = '/auth/login';
+            }
         });
     }
 </script>
