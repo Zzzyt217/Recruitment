@@ -1,6 +1,6 @@
 package com.test.Controller;
 
-import com.test.Pojo.Resume;
+import com.test.Pojo.Resumes;
 import com.test.Service.ResumeService;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ public class ResumeController {
     private ResumeService resumeService;
 
     @PostMapping("/sync")
-    public Map<String, Object> syncResume(@RequestBody Resume resume) {
+    public Map<String, Object> syncResume(@RequestBody Resumes resume) {
         Map<String, Object> result = new HashMap<>();
         try {
             resumeService.syncResume(resume);

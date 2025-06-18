@@ -2,7 +2,7 @@ package com.test.Controller;
 
 import com.test.Client.ResumeClient;
 import com.test.Mapper.ResumeMapper;
-import com.test.Pojo.Resume;
+import com.test.Pojo.JobseekerResume;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +44,11 @@ public class ResumeController {
         try {
             // 获取用户简历信息
             Integer userId = Integer.parseInt(userIdStr);
-            Resume resume = resumeMapper.findByUserId(userId);
+            JobseekerResume resume = resumeMapper.findByUserId(userId);
             
             // 如果没有找到简历信息，创建一个空的Resume对象
             if (resume == null) {
-                resume = new Resume();
+                resume = new JobseekerResume();
                 resume.setUserId(userId);
             }
             
@@ -115,8 +115,8 @@ public class ResumeController {
             Integer userId = Integer.parseInt(userIdStr);
 
             // 查找用户是否已经有简历
-            Resume existingResume = resumeMapper.findByUserId(userId);
-            Resume resume;
+            JobseekerResume existingResume = resumeMapper.findByUserId(userId);
+            JobseekerResume resume;
 
             if (existingResume != null) {
                 // 更新现有简历
@@ -132,7 +132,7 @@ public class ResumeController {
                 result.put("message", "简历更新成功");
             } else {
                 // 插入新简历
-                resume = new Resume();
+                resume = new JobseekerResume();
                 resume.setUserId(userId);
                 resume.setEmail(email);
                 resume.setName(name);
@@ -171,6 +171,22 @@ public class ResumeController {
             result.put("message", "操作失败: " + e.getMessage());
         }
         return result;
+    }
+
+    @GetMapping("/api/profile/{userId}")
+    @ResponseBody
+    public ResponseEntity<JobseekerResume> getResumeByUserId(@PathVariable("userId") Integer userId) {
+        try {
+            JobseekerResume resume = resumeMapper.findByUserId(userId);
+            if (resume != null) {
+                return ResponseEntity.ok(resume);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 } 

@@ -12,7 +12,4 @@ public interface ResumeClient {
     
     @PostMapping("/api/resumes/sync")
     Map<String, Object> syncResume(@RequestBody Map<String, Object> resume);
-
-    @GetMapping("/api/resumes/profile")
-    Map<String, Object> getProfile(@RequestHeader("userId") String userId);
-} 
+}

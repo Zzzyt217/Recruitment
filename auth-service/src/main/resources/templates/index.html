@@ -424,7 +424,7 @@
         </div>
         <div class="card animate delay-2">
             <i class="fas fa-building card-icon"></i>
-            <h2><i class="fas fa-building"></i> 企业中心</h2>
+            <h2><i class="fas fa-building" id="companycenter"></i> 企业中心</h2>
             <p>企业用户可以查看和修改企业基本信息。</p>
             <br>
             <a href="/company/profile" class="card-action" id="companyProfileLink">企业信息</a>
@@ -502,6 +502,7 @@
                     document.getElementById('postJobLink').parentElement.style.display = 'none';
                     document.getElementById('talentLink').parentElement.style.display = 'none';
                     document.getElementById('analyticsLink').parentElement.style.display = 'none';
+                    document.getElementById('companyProfileLink').parentElement.style.display = 'none';
                 } else if (payload.role === '企业') {
                     document.getElementById('findpostion').parentElement.style.display = 'none';
                     document.getElementById('resumeLink').parentElement.style.display = 'none';

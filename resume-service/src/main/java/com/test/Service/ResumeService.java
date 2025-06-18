@@ -1,7 +1,7 @@
 package com.test.Service;
 
 import com.test.Mapper.ResumeMapper;
-import com.test.Pojo.Resume;
+import com.test.Pojo.Resumes;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
@@ -11,10 +11,10 @@ public class ResumeService {
     @Resource
     private ResumeMapper resumeMapper;
 
-    public void syncResume(Resume resume) {
+    public void syncResume(Resumes resume) {
         System.out.println("收到简历同步请求: " + resume);
         
-        Resume existing = resumeMapper.findByUserIdAndBaseInfoId(
+        Resumes existing = resumeMapper.findByUserIdAndBaseInfoId(
             resume.getUserId(), resume.getBaseInfoId());
             
         if (existing == null) {
