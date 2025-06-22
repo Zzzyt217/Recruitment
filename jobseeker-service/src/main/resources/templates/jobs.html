@@ -211,10 +211,12 @@
             transition: var(--transition);
             position: relative;
             border-left: 4px solid var(--primary-color);
+            cursor: pointer;
         }
         
         .job-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
         
         .job-header {
@@ -259,6 +261,18 @@
             margin: 15px 0;
             color: var(--text-light);
             line-height: 1.6;
+        }
+        
+        .job-requirements {
+            margin: 15px 0;
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 14px;
+            padding-left: 10px;
+            border-left: 3px solid var(--accent-color);
+            background-color: rgba(76, 201, 240, 0.05);
+            padding: 10px;
+            border-radius: 4px;
         }
         
         .job-tags {
@@ -337,6 +351,39 @@
                 padding: 15px;
             }
         }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            background-color: white;
+            min-width: 150px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -369,16 +416,47 @@
                         <i class="fas fa-search"></i> 搜索
                     </button>
                 </div>
+                
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <label for="filter-location">地点:</label>
+                        <select id="filter-location" class="filter-select">
+                            <option value="">所有地点</option>
+                            <option value="北京">北京</option>
+                            <option value="上海">上海</option>
+                            <option value="深圳">深圳</option>
+                            <option value="广州">广州</option>
+                            <option value="杭州">杭州</option>
+                            <option value="成都">成都</option>
+                            <option value="武汉">武汉</option>
+                            <option value="南京">南京</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-category">类别:</label>
+                        <select id="filter-category" class="filter-select">
+                            <option value="">所有类别</option>
+                            <option value="技术">技术</option>
+                            <option value="产品">产品</option>
+                            <option value="设计">设计</option>
+                            <option value="运营">运营</option>
+                            <option value="市场">市场</option>
+                            <option value="销售">销售</option>
+                            <option value="财务">财务</option>
+                            <option value="人力资源">人力资源</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 职位列表区域 -->
         <div id="job-results" class="job-list">
             <!-- 职位结果将通过JavaScript动态插入 -->
-            <div class="no-results">
-                <i class="fas fa-search"></i>
-                <h3>请输入关键词开始搜索职位</h3>
-                <p>您可以搜索职位名称、公司名称或相关技能</p>
+            <div class="no-results" id="loading-placeholder">
+                <i class="fas fa-spinner fa-spin"></i>
+                <h3>正在加载职位信息...</h3>
+                <p>请稍候</p>
             </div>
         </div>
     </div>
@@ -387,7 +465,7 @@
         <p>© 2025 SupRecruitment. 保留所有权利。</p>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function() {
             // 检查是否已登录
             const token = getToken();
@@ -401,22 +479,54 @@
             const searchInput = document.getElementById('search-keyword');
             const jobResults = document.getElementById('job-results');
             
+            // 检查是否有预加载的职位数据
+            const hasPreloadedJobs = /*[[${hasPreloadedJobs}]]*/ false;
+            const preloadedJobs = /*[[${preloadedJobs}]]*/ [];
+            
+            if (hasPreloadedJobs && preloadedJobs && preloadedJobs.length > 0) {
+                console.log('使用预加载的职位数据:', preloadedJobs.length);
+                displayResults(preloadedJobs, '');
+            } else {
+                // 如果没有预加载数据，则主动搜索所有职位
+                console.log('无预加载数据或预加载数据为空，主动搜索所有职位');
+                search('', '', '');
+            }
+            
             // 搜索按钮点击事件
             searchButton.addEventListener('click', function() {
                 const keyword = searchInput.value.trim();
-                search(keyword);
+                const location = document.getElementById('filter-location').value.trim();
+                const category = document.getElementById('filter-category').value.trim();
+                search(keyword, location, category);
             });
             
             // Enter键搜索
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     const keyword = searchInput.value.trim();
-                    search(keyword);
+                    const location = document.getElementById('filter-location').value.trim();
+                    const category = document.getElementById('filter-category').value.trim();
+                    search(keyword, location, category);
                 }
             });
             
+            // 筛选器变化时触发搜索
+            document.getElementById('filter-location').addEventListener('change', function() {
+                const keyword = searchInput.value.trim();
+                const location = document.getElementById('filter-location').value.trim();
+                const category = document.getElementById('filter-category').value.trim();
+                search(keyword, location, category);
+            });
+            
+            document.getElementById('filter-category').addEventListener('change', function() {
+                const keyword = searchInput.value.trim();
+                const location = document.getElementById('filter-location').value.trim();
+                const category = document.getElementById('filter-category').value.trim();
+                search(keyword, location, category);
+            });
+            
             // 搜索职位函数
-            function search(keyword) {
+            function search(keyword, location, category) {
                 // 显示加载中
                 jobResults.innerHTML = '<div class="no-results"><i class="fas fa-spinner fa-spin"></i><h3>正在搜索中...</h3></div>';
                 
@@ -446,31 +556,57 @@
                     // 获取当前URL判断是直接访问还是通过网关访问
                     const isGateway = window.location.port === '9000';
                     
-                    // 根据访问方式构建不同的API URL
-                    const apiUrl = isGateway 
-                        ? `/api/jobs/search?keyword=${encodeURIComponent(keyword)}`
-                        : `/jobseeker/api/jobs/search?keyword=${encodeURIComponent(keyword)}`;
+                    // 构建API URL，包括筛选参数
+                    let apiUrl = isGateway 
+                        ? `/jobseeker/api/jobs/search`
+                        : `/jobseeker/api/jobs/search`;
+                        
+                    // 添加搜索参数
+                    const params = [];
+                    if (keyword) params.push(`keyword=${encodeURIComponent(keyword)}`);
+                    if (location) params.push(`location=${encodeURIComponent(location)}`);
+                    if (category) params.push(`category=${encodeURIComponent(category)}`);
+                    
+                    if (params.length > 0) {
+                        apiUrl += '?' + params.join('&');
+                    }
                     
                     console.log('搜索API URL:', apiUrl);
+                    console.log('搜索参数 - 关键词:', keyword);
+                    console.log('搜索参数 - 地点:', location);
+                    console.log('搜索参数 - 类别:', category);
                     
                     // 发送AJAX请求到后端
+                    console.log('准备发送请求，请求头:', headers);
+                    console.log('完整请求URL:', window.location.origin + apiUrl);
+                    
                     fetch(apiUrl, {
                         headers: headers
                     })
                     .then(response => {
+                        console.log('收到响应状态:', response.status);
+                        console.log('响应头:', response.headers);
+                        
                         if (!response.ok) {
                             if (response.status === 401) {
+                                console.error('认证失败，状态码:', response.status);
                                 throw new Error('未授权访问，请重新登录');
                             }
+                            console.error('请求失败，状态码:', response.status);
                             throw new Error('网络响应不正常');
                         }
-                        return response.json();
+                        return response.json().catch(err => {
+                            console.error('JSON解析错误:', err);
+                            throw new Error('响应数据格式错误');
+                        });
                     })
                     .then(data => {
+                        console.log('成功获取数据:', data);
                         displayResults(data, keyword);
                     })
                     .catch(error => {
                         console.error('搜索出错:', error);
+                        console.error('错误详情:', error.stack);
                         if (error.message.includes('未授权访问')) {
                             alert('请重新登录！');
                             window.location.href = '/auth/login';
@@ -516,7 +652,7 @@
                     }
                     
                     html += `
-                        <div class="job-card">
+                        <div class="job-card" data-job-id="${job.id}" onclick="viewJobDetail(${job.id})">
                             <div class="job-header">
                                 <div>
                                     <h2 class="job-title">${job.title}</h2>
@@ -528,10 +664,11 @@
                                 <div class="job-salary">${job.salary}</div>
                             </div>
                             <div class="job-description">${job.description}</div>
+                            <div class="job-requirements"><strong>任职要求:</strong> ${job.requirements ? job.requirements.substring(0, 100) + (job.requirements.length > 100 ? '...' : '') : '无'}</div>
                             <div class="job-tags">
                                 ${tagsHtml}
                             </div>
-                            <button class="job-apply" data-job-id="${job.id}">
+                            <button class="job-apply" data-job-id="${job.id}" onclick="applyJob(event, ${job.id})">
                                 <i class="fas fa-paper-plane"></i> 立即申请
                             </button>
                         </div>
@@ -539,18 +676,54 @@
                 });
                 
                 jobResults.innerHTML = html;
+            }
+            
+            // 查看职位详情
+            function viewJobDetail(jobId) {
+                const token = getToken();
+                if (!token) {
+                    alert('请先登录！');
+                    window.location.href = '/auth/login';
+                    return;
+                }
+
+                try {
+                    // 解析JWT获取用户ID
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join('')));
                 
-                // 添加申请按钮点击事件
-                document.querySelectorAll('.job-apply').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const jobId = this.getAttribute('data-job-id');
-                        applyJob(jobId);
-                    });
-                });
+                    // 准备请求头
+                    const headers = {
+                        'Authorization': `Bearer ${token}`,
+                        'userId': payload.id,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    };
+                    
+                    // 获取当前URL判断是直接访问还是通过网关访问
+                    const isGateway = window.location.port === '9000';
+                    
+                    // 构建详情页URL
+                    const detailUrl = isGateway 
+                        ? `/jobseeker/jobs/${jobId}`
+                        : `/jobseeker/jobs/${jobId}`;
+                    
+                    // 跳转到详情页
+                    window.location.href = detailUrl;
+                } catch (error) {
+                    console.error('JWT解析失败:', error);
+                    alert('登录信息无效，请重新登录');
+                    window.location.href = '/auth/login';
+                }
             }
             
             // 申请职位函数
-            function applyJob(jobId) {
+            function applyJob(event, jobId) {
+                // 阻止事件冒泡，避免触发卡片的点击事件
+                event.stopPropagation();
+                
                 const token = getToken();
                 
                 if (!token) {
