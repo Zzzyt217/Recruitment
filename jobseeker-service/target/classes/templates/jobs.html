@@ -466,6 +466,133 @@
     </div>
 
     <script th:inline="javascript">
+        // 全局申请职位函数
+        function applyJob(event, jobId, companyId) {
+            // 阻止事件冒泡，避免触发卡片的点击事件
+            event.stopPropagation();
+            
+            const token = getToken();
+            
+            if (!token) {
+                alert('请先登录再申请职位');
+                window.location.href = '/auth/login';
+                return;
+            }
+            
+            try {
+                // 解析JWT获取用户ID
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join('')));
+                
+                // 准备请求头
+                const headers = {
+                    'Authorization': `Bearer ${token}`,
+                    'userId': payload.id,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                };
+                
+                // 默认使用ID为1的简历
+                const resumeId = 1;
+                
+                // 准备请求体
+                const formData = new URLSearchParams();
+                formData.append('positionId', jobId);
+                formData.append('companyId', companyId || 1); // 如果companyId为undefined，则使用默认值1
+                formData.append('resumeId', resumeId);
+                formData.append('coverLetter', '');
+                
+                // 获取当前URL判断是直接访问还是通过网关访问
+                const isGateway = window.location.hostname !== 'localhost' || window.location.port === '9000';
+                
+                // 构建API URL
+                const apiUrl = isGateway 
+                    ? '/jobseeker/api/jobs/apply'
+                    : '/api/jobs/apply';
+                    
+                console.log('发送申请请求到:', apiUrl, '是否通过网关访问:', isGateway);
+                
+                // 发送申请请求
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData
+                })
+                .then(response => {
+                    console.log('收到响应:', response.status, response.statusText);
+                    return response.json().catch(err => {
+                        console.error('JSON解析错误:', err);
+                        return { success: false };
+                    });
+                })
+                .then(data => {
+                    console.log('申请结果:', data);
+                    if (data.success) {
+                        alert('申请成功！');
+                    } else {
+                        alert('申请失败：' + (data.message || '未知错误'));
+                    }
+                })
+                .catch(error => {
+                    console.error('申请出错:', error);
+                    alert('申请提交失败，请稍后再试');
+                });
+            } catch (error) {
+                console.error('JWT解析失败:', error);
+                alert('登录信息无效，请重新登录');
+                window.location.href = '/auth/login';
+            }
+        }
+        
+        // 全局查看职位详情函数
+        function viewJobDetail(jobId) {
+            const token = getToken();
+            if (!token) {
+                alert('请先登录！');
+                window.location.href = '/auth/login';
+                return;
+            }
+
+            try {
+                // 解析JWT获取用户ID
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join('')));
+            
+                // 跳转到详情页
+                window.location.href = `/jobs/${jobId}`;
+            } catch (error) {
+                console.error('JWT解析失败:', error);
+                alert('登录信息无效，请重新登录');
+                window.location.href = '/auth/login';
+            }
+        }
+        
+        // 全局获取token函数
+        function getToken() {
+            // 优先从localStorage获取
+            const localToken = localStorage.getItem('token');
+            if (localToken) {
+                return localToken;
+            }
+            
+            // 如果localStorage中没有，尝试从Cookie获取
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('token=')) {
+                    return cookie.substring('token='.length, cookie.length);
+                }
+            }
+            
+            // 如果都没有，尝试从sessionStorage获取
+            return sessionStorage.getItem('token');
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // 检查是否已登录
             const token = getToken();
@@ -554,7 +681,7 @@
                     };
                     
                     // 获取当前URL判断是直接访问还是通过网关访问
-                    const isGateway = window.location.port === '9000';
+                    const isGateway = window.location.hostname !== 'localhost' || window.location.port === '9000';
                     
                     // 构建API URL，包括筛选参数
                     let apiUrl = isGateway 
@@ -643,6 +770,9 @@
                 let html = '';
                 
                 jobs.forEach(job => {
+                    // 确保companyId存在，如果不存在则使用默认值1
+                    const companyId = job.companyId || 1;
+                    
                     // 生成职位标签HTML
                     let tagsHtml = '';
                     if (job.tags && job.tags.length > 0) {
@@ -668,7 +798,7 @@
                             <div class="job-tags">
                                 ${tagsHtml}
                             </div>
-                            <button class="job-apply" data-job-id="${job.id}" onclick="applyJob(event, ${job.id})">
+                            <button class="job-apply" data-job-id="${job.id}" data-company-id="${companyId}" onclick="applyJob(event, ${job.id}, ${companyId})">
                                 <i class="fas fa-paper-plane"></i> 立即申请
                             </button>
                         </div>
@@ -676,85 +806,6 @@
                 });
                 
                 jobResults.innerHTML = html;
-            }
-            
-            // 查看职位详情
-            function viewJobDetail(jobId) {
-                const token = getToken();
-                if (!token) {
-                    alert('请先登录！');
-                    window.location.href = '/auth/login';
-                    return;
-                }
-
-                try {
-                    // 解析JWT获取用户ID
-                    const base64Url = token.split('.')[1];
-                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                    const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join('')));
-                
-                    // 准备请求头
-                    const headers = {
-                        'Authorization': `Bearer ${token}`,
-                        'userId': payload.id,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    };
-                    
-                    // 获取当前URL判断是直接访问还是通过网关访问
-                    const isGateway = window.location.port === '9000';
-                    
-                    // 构建详情页URL
-                    const detailUrl = isGateway 
-                        ? `/jobseeker/jobs/${jobId}`
-                        : `/jobseeker/jobs/${jobId}`;
-                    
-                    // 跳转到详情页
-                    window.location.href = detailUrl;
-                } catch (error) {
-                    console.error('JWT解析失败:', error);
-                    alert('登录信息无效，请重新登录');
-                    window.location.href = '/auth/login';
-                }
-            }
-            
-            // 申请职位函数
-            function applyJob(event, jobId) {
-                // 阻止事件冒泡，避免触发卡片的点击事件
-                event.stopPropagation();
-                
-                const token = getToken();
-                
-                if (!token) {
-                    alert('请先登录再申请职位');
-                    window.location.href = '/auth/login';
-                    return;
-                }
-                
-                // TODO: 实现申请逻辑
-                alert(`你已成功申请职位ID: ${jobId}，请等待企业回复`);
-            }
-            
-            // 获取token
-            function getToken() {
-                // 优先从localStorage获取
-                const localToken = localStorage.getItem('token');
-                if (localToken) {
-                    return localToken;
-                }
-                
-                // 如果localStorage中没有，尝试从Cookie获取
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.startsWith('token=')) {
-                        return cookie.substring('token='.length, cookie.length);
-                    }
-                }
-                
-                // 如果都没有，尝试从sessionStorage获取
-                return sessionStorage.getItem('token');
             }
         });
     </script>
