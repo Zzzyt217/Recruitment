@@ -2,6 +2,8 @@ package com.test.Controller;
 
 import com.test.Pojo.Application;
 import com.test.Service.ApplicationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -130,20 +132,35 @@ public class ApplicationController {
 
     // 获取公司的所有申请
     @GetMapping("/company/{companyId}")
-    public List<Map<String, Object>> getCompanyApplications(@PathVariable("companyId") Long companyId, HttpServletRequest request) {
+    public ResponseEntity<?> getCompanyApplications(@PathVariable("companyId") Long companyId, HttpServletRequest request) {
         try {
             // 验证token
             String authHeader = request.getHeader("Authorization");
             String userIdStr = request.getHeader("userId");
 
             if (authHeader == null || !authHeader.startsWith("Bearer ") || userIdStr == null || userIdStr.isEmpty()) {
-                return Collections.emptyList();
+                System.out.println("\n身份验证失败 - 缺少必要的认证信息");
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("success", false);
+                errorResponse.put("message", "未授权访问");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
 
-            return applicationService.getApplicationsByCompanyId(companyId);
+            List<Map<String, Object>> applications = applicationService.getApplicationsByCompanyId(companyId);
+            
+            System.out.println("\n成功获取申请列表 - 数量: " + applications.size());
+            
+            return ResponseEntity.ok(applications);
         } catch (Exception e) {
+            System.out.println("\n获取申请列表时出错:");
+            System.out.println("异常类型: " + e.getClass().getName());
+            System.out.println("异常消息: " + e.getMessage());
             e.printStackTrace();
-            return Collections.emptyList();
+
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "获取申请列表失败: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 

@@ -548,6 +548,13 @@
         
         // 全局查看职位详情函数
         function viewJobDetail(jobId) {
+            // 防止页面跳转，只打印日志
+            console.log('查看职位详情:', jobId);
+            // 直接返回，不执行跳转
+            return false;
+            
+            // 以下代码已被禁用
+            /*
             const token = getToken();
             if (!token) {
                 alert('请先登录！');
@@ -570,6 +577,7 @@
                 alert('登录信息无效，请重新登录');
                 window.location.href = '/auth/login';
             }
+            */
         }
         
         // 全局获取token函数
@@ -782,7 +790,7 @@
                     }
                     
                     html += `
-                        <div class="job-card" data-job-id="${job.id}" onclick="viewJobDetail(${job.id})">
+                        <div class="job-card" data-job-id="${job.id}" onclick="return viewJobDetail(${job.id})">
                             <div class="job-header">
                                 <div>
                                     <h2 class="job-title">${job.title}</h2>

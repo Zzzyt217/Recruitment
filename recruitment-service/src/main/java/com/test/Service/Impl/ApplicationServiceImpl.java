@@ -3,9 +3,17 @@ package com.test.Service.Impl;
 import com.test.Mapper.ApplicationMapper;
 import com.test.Pojo.Application;
 import com.test.Service.ApplicationService;
+import com.test.Service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 
 @Service
@@ -13,6 +21,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     
     @Resource
     private ApplicationMapper applicationMapper;
+    
+    @Autowired
+    private DataSource dataSource;
+    
+    @Autowired
+    private EmailService emailService;
     
     @Override
     public Map<String, Object> createApplication(Application application) {
@@ -156,12 +170,42 @@ public class ApplicationServiceImpl implements ApplicationService {
                 appMap.put("createdAt", application.getCreatedAt());
                 appMap.put("updatedAt", application.getUpdatedAt());
                 
-                // 添加用户名和职位标题（如果有）
-                if (application.getUserName() != null) {
-                    appMap.put("userName", application.getUserName());
-                }
-                if (application.getPositionTitle() != null) {
-                    appMap.put("positionTitle", application.getPositionTitle());
+                // 手动查询用户名和职位标题
+                try (Connection conn = dataSource.getConnection()) {
+                    // 查询用户姓名（从jobseekers库的resume表获取）
+                    PreparedStatement userStmt = conn.prepareStatement(
+                        "SELECT name FROM jobseekers.resume WHERE user_id = ?"
+                    );
+                    userStmt.setInt(1, application.getUserId());
+                    ResultSet userRs = userStmt.executeQuery();
+                    if (userRs.next()) {
+                        String userName = userRs.getString("name");
+                        appMap.put("userName", userName);
+                    } else {
+                        // 如果resume表中没有，尝试从users表获取用户名作为备选
+                        PreparedStatement backupStmt = conn.prepareStatement(
+                            "SELECT username FROM recruitment.users WHERE id = ?"
+                        );
+                        backupStmt.setInt(1, application.getUserId());
+                        ResultSet backupRs = backupStmt.executeQuery();
+                        if (backupRs.next()) {
+                            String userName = backupRs.getString("username");
+                            appMap.put("userName", userName);
+                        }
+                    }
+                    
+                    // 查询职位标题
+                    PreparedStatement posStmt = conn.prepareStatement(
+                        "SELECT title FROM company1_db.position WHERE id = ?"
+                    );
+                    posStmt.setLong(1, application.getPositionId());
+                    ResultSet posRs = posStmt.executeQuery();
+                    if (posRs.next()) {
+                        String positionTitle = posRs.getString("title");
+                        appMap.put("positionTitle", positionTitle);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 
                 result.add(appMap);
@@ -210,15 +254,79 @@ public class ApplicationServiceImpl implements ApplicationService {
         Map<String, Object> result = new HashMap<>();
         
         try {
+            // 验证状态值是否有效
+            Set<String> validStatuses = new HashSet<>(Arrays.asList(
+                "PENDING", "APPLIED", "REVIEWING", "INTERVIEW", "ACCEPTED", "OFFER", "REJECTED"
+            ));
+            
+            if (!validStatuses.contains(status.toUpperCase())) {
+                result.put("success", false);
+                result.put("message", "无效的状态值：" + status);
+                return result;
+            }
+            
+            // 统一状态为大写
+            String upperStatus = status.toUpperCase();
+            
+            // 更新状态
             Date now = new Date();
-            int updateResult = applicationMapper.updateStatus(id, status, now);
+            int updateResult = applicationMapper.updateStatus(id, upperStatus, now);
             
             if (updateResult > 0) {
+                // 如果状态更新为OFFER，发送录用通知邮件
+                if ("OFFER".equals(upperStatus)) {
+                    try {
+                        // 直接通过SQL查询获取所有需要的信息
+                        try (Connection conn = dataSource.getConnection()) {
+                            if (conn != null) {
+                                // 一次性查询所有需要的信息，包括resume中的姓名
+                                PreparedStatement appStmt = conn.prepareStatement(
+                                    "SELECT a.*, u.eemail, u.username, r.name as resume_name, p.title as position_title, c.name as company_name " +
+                                    "FROM recruitment_db.application a " +
+                                    "LEFT JOIN recruitment.users u ON a.user_id = u.id " +
+                                    "LEFT JOIN jobseekers.resume r ON u.id = r.user_id " +
+                                    "LEFT JOIN company1_db.position p ON a.position_id = p.id " +
+                                    "LEFT JOIN company1_db.company c ON a.company_id = c.id " +
+                                    "WHERE a.id = ?"
+                                );
+                                appStmt.setLong(1, id);
+                                ResultSet appRs = appStmt.executeQuery();
+                                
+                                if (appRs.next()) {
+                                    // 获取所需的信息
+                                    String userEmail = appRs.getString("eemail");
+                                    
+                                    // 优先使用简历中的姓名，如果为空则使用用户名
+                                    String resumeName = appRs.getString("resume_name");
+                                    String username = appRs.getString("username");
+                                    String candidateName = (resumeName != null && !resumeName.isEmpty()) ? resumeName : username;
+                                    
+                                    String positionTitle = appRs.getString("position_title");
+                                    String companyName = appRs.getString("company_name");
+                                    
+                                    // 发送录用通知邮件
+                                    if (userEmail != null && !userEmail.isEmpty() && emailService != null) {
+                                        emailService.sendOfferNotification(
+                                            userEmail,
+                                            candidateName != null ? candidateName : "求职者",
+                                            positionTitle != null ? positionTitle : "相关职位",
+                                            companyName != null ? companyName : "招聘企业"
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        // 记录异常但不影响主要流程
+                        e.printStackTrace();
+                    }
+                }
+                
                 result.put("success", true);
                 result.put("message", "申请状态更新成功");
             } else {
                 result.put("success", false);
-                result.put("message", "申请状态更新失败");
+                result.put("message", "申请状态更新失败，申请ID可能不存在");
             }
         } catch (Exception e) {
             e.printStackTrace();

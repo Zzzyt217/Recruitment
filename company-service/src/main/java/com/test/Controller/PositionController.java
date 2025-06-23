@@ -461,6 +461,7 @@ public class PositionController {
                 positionMap.put("id", position.getId());
                 positionMap.put("title", position.getTitle());
                 positionMap.put("company", getCompanyName(position.getCompanyId()));
+                positionMap.put("companyId", position.getCompanyId());
                 positionMap.put("location", position.getLocation());
                 positionMap.put("salary", position.getSalaryRange());
                 positionMap.put("description", position.getDescription());
@@ -518,13 +519,13 @@ public class PositionController {
                     positionMap.put("id", position.getId());
                     positionMap.put("title", position.getTitle());
                     positionMap.put("company", getCompanyName(position.getCompanyId()));
+                    positionMap.put("companyId", position.getCompanyId());
                     positionMap.put("location", position.getLocation());
                     positionMap.put("salary", position.getSalaryRange());
                     positionMap.put("description", position.getDescription());
                     positionMap.put("requirements", position.getRequirements());
                     positionMap.put("category", position.getCategory());
                     positionMap.put("updateTime", position.getUpdatedAt());
-
                     
                     result.add(positionMap);
                 }

@@ -78,7 +78,6 @@
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.4" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor.addons:reactor-extra:3.4.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.7.4" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.23" level="project" />
     <orderEntry type="library" name="Maven: com.stoyanr:evictor:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.7.4" level="project" />
@@ -102,6 +101,12 @@
     <orderEntry type="library" name="Maven: io.github.openfeign:feign-core:11.8" level="project" />
     <orderEntry type="library" name="Maven: io.github.openfeign:feign-slf4j:11.8" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-mail:2.7.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.23" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.mail:jakarta.mail:1.6.7" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:1.2.2" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.6.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.7.4" level="project" />
