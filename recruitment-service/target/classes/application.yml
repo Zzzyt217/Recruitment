@@ -28,6 +28,24 @@ spring:
         transport:
           protocol: smtp
         debug: true
+  rabbitmq:
+    host: 192.168.230.128
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    #可靠性配置
+    publisher-confirm-type: correlated #异步发布者确认
+    publisher-returns: true   #启用发布者返回机制
+    template:
+      mandatory: true
+    # 消费者配置
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
+        concurrency: 3
+        max-concurrency: 10
 
 eureka:
   client:

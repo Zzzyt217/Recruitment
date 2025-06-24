@@ -495,7 +495,7 @@
                 default:
                     statusText = status;
             }
-            
+
             if (!confirm('确定要将申请状态更新为"' + statusText + '"吗？')) {
                 return;
             }
@@ -515,10 +515,10 @@
                 const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
-                
+
                 const decodedToken = JSON.parse(jsonPayload);
                 const userId = decodedToken.id;
-                
+
                 // 创建一个新的axios实例用于此次请求
                 const axiosInstance = axios.create({
                     headers: {
@@ -526,7 +526,7 @@
                         'userId': userId
                     }
                 });
-                
+
                 // 使用新创建的axios实例发送请求
                 axiosInstance.put('/company/applications/' + applicationId + '/status', { status: status })
                 .then(function(response) {
@@ -556,7 +556,7 @@
         }
 
         function viewDetail(applicationId) {
-            window.location.href = '/company/applications/' + applicationId;
+            alert('申请详情功能即将上线，敬请期待！');
         }
 
         // 筛选表单提交

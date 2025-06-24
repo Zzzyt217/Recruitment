@@ -4,6 +4,8 @@ import com.test.Mapper.ApplicationMapper;
 import com.test.Pojo.Application;
 import com.test.Service.ApplicationService;
 import com.test.Service.EmailService;
+import com.test.Service.Impl.EmailMessageProducer;
+import com.test.Service.Impl.ApplicationStatusProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     
     @Autowired
     private EmailService emailService;
+    
+    @Autowired
+    private EmailMessageProducer emailMessageProducer;
+    
+    @Autowired
+    private ApplicationStatusProducer applicationStatusProducer;
     
     @Override
     public Map<String, Object> createApplication(Application application) {
@@ -273,6 +281,9 @@ public class ApplicationServiceImpl implements ApplicationService {
             int updateResult = applicationMapper.updateStatus(id, upperStatus, now);
             
             if (updateResult > 0) {
+                // 发送申请状态变更消息
+                applicationStatusProducer.sendStatusChangeMessage(id, upperStatus);
+                
                 // 如果状态更新为OFFER，发送录用通知邮件
                 if ("OFFER".equals(upperStatus)) {
                     try {
@@ -304,9 +315,9 @@ public class ApplicationServiceImpl implements ApplicationService {
                                     String positionTitle = appRs.getString("position_title");
                                     String companyName = appRs.getString("company_name");
                                     
-                                    // 发送录用通知邮件
-                                    if (userEmail != null && !userEmail.isEmpty() && emailService != null) {
-                                        emailService.sendOfferNotification(
+                                    // 使用消息队列发送录用通知邮件
+                                    if (userEmail != null && !userEmail.isEmpty()) {
+                                        emailMessageProducer.sendOfferNotificationMessage(
                                             userEmail,
                                             candidateName != null ? candidateName : "求职者",
                                             positionTitle != null ? positionTitle : "相关职位",
@@ -318,6 +329,53 @@ public class ApplicationServiceImpl implements ApplicationService {
                         }
                     } catch (Exception e) {
                         // 记录异常但不影响主要流程
+                        e.printStackTrace();
+                    }
+                } else if ("INTERVIEW".equals(upperStatus)) {
+                    // 如果状态更新为INTERVIEW，发送面试邀请
+                    try {
+                        try (Connection conn = dataSource.getConnection()) {
+                            if (conn != null) {
+                                PreparedStatement appStmt = conn.prepareStatement(
+                                    "SELECT a.*, u.eemail, u.username, r.name as resume_name, p.title as position_title, c.name as company_name " +
+                                    "FROM recruitment_db.application a " +
+                                    "LEFT JOIN recruitment.users u ON a.user_id = u.id " +
+                                    "LEFT JOIN jobseekers.resume r ON u.id = r.user_id " +
+                                    "LEFT JOIN company1_db.position p ON a.position_id = p.id " +
+                                    "LEFT JOIN company1_db.company c ON a.company_id = c.id " +
+                                    "WHERE a.id = ?"
+                                );
+                                appStmt.setLong(1, id);
+                                ResultSet appRs = appStmt.executeQuery();
+                                
+                                if (appRs.next()) {
+                                    String userEmail = appRs.getString("eemail");
+                                    String resumeName = appRs.getString("resume_name");
+                                    String username = appRs.getString("username");
+                                    String candidateName = (resumeName != null && !resumeName.isEmpty()) ? resumeName : username;
+                                    String positionTitle = appRs.getString("position_title");
+                                    String companyName = appRs.getString("company_name");
+                                    
+                                    // 使用消息队列发送面试邀请邮件
+                                    if (userEmail != null && !userEmail.isEmpty()) {
+                                        // 设置默认面试时间为3天后
+                                        Calendar calendar = Calendar.getInstance();
+                                        calendar.add(Calendar.DAY_OF_MONTH, 3);
+                                        Date interviewTime = calendar.getTime();
+                                        
+                                        emailMessageProducer.sendInterviewInvitationMessage(
+                                            userEmail,
+                                            candidateName != null ? candidateName : "求职者",
+                                            positionTitle != null ? positionTitle : "相关职位",
+                                            companyName != null ? companyName : "招聘企业",
+                                            interviewTime,
+                                            "公司总部"
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

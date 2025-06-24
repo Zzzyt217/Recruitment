@@ -434,7 +434,7 @@
             <i class="fas fa-chart-line card-icon"></i>
             <h2><i class="fas fa-chart-line"></i> 招聘分析</h2>
             <p>企业用户可以查看职位发布效果，申请转化率和招聘漏斗数据分析。</p>
-            <a href="#" class="card-action" id="analyticsLink">查看分析</a>
+            <a href="#" class="card-action" id="analyticsLink" >查看分析</a>
         </div>
     </div>
 
@@ -952,6 +952,17 @@
             }
         });
     }
+
+    const analyticsLink = document.getElementById('analyticsLink');
+
+    // 添加点击事件监听器
+    analyticsLink.addEventListener('click', function(event) {
+        // 阻止默认的链接跳转行为
+        event.preventDefault();
+
+        // 显示弹窗
+        alert('数据分析功能即将上线，敬请期待！');
+    });
 </script>
 </body>
 </html> 
