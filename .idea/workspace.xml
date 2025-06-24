@@ -11,22 +11,38 @@
       <change afterPath="$PROJECT_DIR$/../springcloud/mvnw" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../springcloud/mvnw.cmd" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../springcloud/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/target/classes/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/target/classes/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/templates/applications.html" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/templates/applications.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/target/classes/templates/applications.html" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/target/classes/templates/applications.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/recruitment-service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/recruitment-service.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/src/main/java/com/test/Service/Impl/ApplicationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/src/main/java/com/test/Service/Impl/ApplicationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/META-INF/recruitment-service.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Service/Impl/ApplicationServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Service/Impl/ApplicationServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/gateway-service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/gateway-service.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/src/main/java/com/test/gateway/AuthFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/src/main/java/com/test/gateway/GatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/src/main/java/com/test/gateway/GatewayApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/AuthFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/GatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/GatewayApplication.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FavoritesManager">
     <favorites_list name="SpringCloudStudy" />
@@ -68,22 +84,26 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/recruitment-service/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/auth-service02" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\SpringCloudStudy\analytics-service\src\main\java\com" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Recruitment_system\gateway-service\src\main\resources" />
+      <recent name="D:\Recruitment_system" />
+      <recent name="D:\Recruitment_system\gateway-service" />
+      <recent name="D:\Recruitment_system\gateway-service\src\main\java\com\test\gateway\Controller" />
+      <recent name="D:\Recruitment_system\gateway-service\src\main\java\com\test\gateway\Filter" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="Pojo" />
@@ -92,12 +112,8 @@
       <recent name="com.test.Pojo" />
       <recent name="com.test.Mapper" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Recruitment_system\recruitment-service\src\main\resources" />
-      <recent name="D:\Recruitment_system\jobseekers-service\src" />
-      <recent name="D:\Recruitment_system\jobseeker-service\src\main\resources" />
-      <recent name="D:\Recruitment_system\jobseeker-service\src\main\resources\templates" />
-      <recent name="D:\Recruitment_system\auth-service\src\main\resources\templates" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\SpringCloudStudy\analytics-service\src\main\java\com" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -107,11 +123,24 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.CompanyServiceApplication">
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication (1)">
     <configuration name="AnalyticsServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="analytics-service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.test.AnalyticsServiceApplication" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="auth-service (1)" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.test.AuthServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -184,18 +213,20 @@
     </configuration>
     <list>
       <item itemvalue="Spring Boot.AuthServiceApplication" />
+      <item itemvalue="Spring Boot.ResumeServiceApplication" />
       <item itemvalue="Spring Boot.CompanyServiceApplication" />
       <item itemvalue="Spring Boot.GatewayApplication" />
-      <item itemvalue="Spring Boot.ResumeServiceApplication" />
       <item itemvalue="Spring Boot.RecruitmentServiceApplication" />
       <item itemvalue="Spring Boot.AnalyticsServiceApplication" />
       <item itemvalue="Spring Boot.EurekaServerApplication" />
       <item itemvalue="Spring Boot.JobseekerServiceApplication " />
+      <item itemvalue="Spring Boot.AuthServiceApplication (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.JobseekerServiceApplication " />
         <item itemvalue="Spring Boot.EurekaServerApplication" />
+        <item itemvalue="Spring Boot.AuthServiceApplication (1)" />
+        <item itemvalue="Spring Boot.JobseekerServiceApplication " />
       </list>
     </recent_temporary>
   </component>
@@ -212,12 +243,7 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Not Started" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="Finished" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
             </expand>
             <select />
@@ -267,6 +293,8 @@
       <workItem from="1750661365469" duration="1830000" />
       <workItem from="1750664979957" duration="9987000" />
       <workItem from="1750727742938" duration="4587000" />
+      <workItem from="1750765474752" duration="3429000" />
+      <workItem from="1750768924870" duration="6125000" />
     </task>
     <servers />
   </component>
@@ -306,74 +334,78 @@
       <screen x="0" y="0" width="1536" height="816" />
     </state>
     <state x="479" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.816@0.0.1536.816" timestamp="1750231418987" />
-    <state x="549" y="163" key="FileChooserDialogImpl" timestamp="1749807190866">
+    <state x="549" y="163" key="FileChooserDialogImpl" timestamp="1750767186522">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state x="549" y="163" key="FileChooserDialogImpl/0.0.1536.816@0.0.1536.816" timestamp="1749807190866" />
-    <state width="1024" height="255" key="GridCell.Tab.0.bottom" timestamp="1750732381244">
+    <state x="549" y="163" key="FileChooserDialogImpl/0.0.1536.816@0.0.1536.816" timestamp="1750767186522" />
+    <state width="1024" height="378" key="GridCell.Tab.0.bottom" timestamp="1750775075557">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.0.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.0.center" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.0.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750775075557" />
+    <state width="1024" height="378" key="GridCell.Tab.0.center" timestamp="1750775075557">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.0.center/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.0.left" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.0.center/0.0.1536.816@0.0.1536.816" timestamp="1750775075557" />
+    <state width="1024" height="378" key="GridCell.Tab.0.left" timestamp="1750775075557">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.0.left/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.0.right" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.0.left/0.0.1536.816@0.0.1536.816" timestamp="1750775075557" />
+    <state width="1024" height="378" key="GridCell.Tab.0.right" timestamp="1750775075557">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.0.right/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.1.bottom" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.0.right/0.0.1536.816@0.0.1536.816" timestamp="1750775075557" />
+    <state width="1024" height="378" key="GridCell.Tab.1.bottom" timestamp="1750775075558">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.1.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.1.center" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.1.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750775075558" />
+    <state width="1024" height="378" key="GridCell.Tab.1.center" timestamp="1750775075558">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.1.center/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.1.left" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.1.center/0.0.1536.816@0.0.1536.816" timestamp="1750775075558" />
+    <state width="1024" height="378" key="GridCell.Tab.1.left" timestamp="1750775075557">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.1.left/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="255" key="GridCell.Tab.1.right" timestamp="1750732381244">
+    <state width="1024" height="378" key="GridCell.Tab.1.left/0.0.1536.816@0.0.1536.816" timestamp="1750775075557" />
+    <state width="1024" height="378" key="GridCell.Tab.1.right" timestamp="1750775075558">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="255" key="GridCell.Tab.1.right/0.0.1536.816@0.0.1536.816" timestamp="1750732381244" />
-    <state width="1024" height="228" key="GridCell.Tab.2.bottom" timestamp="1749816953005">
+    <state width="1024" height="378" key="GridCell.Tab.1.right/0.0.1536.816@0.0.1536.816" timestamp="1750775075558" />
+    <state width="1024" height="231" key="GridCell.Tab.2.bottom" timestamp="1750774327304">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="228" key="GridCell.Tab.2.bottom/0.0.1536.816@0.0.1536.816" timestamp="1749816953005" />
-    <state width="1024" height="228" key="GridCell.Tab.2.center" timestamp="1749816953004">
+    <state width="1024" height="231" key="GridCell.Tab.2.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
+    <state width="1024" height="231" key="GridCell.Tab.2.center" timestamp="1750774327304">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="228" key="GridCell.Tab.2.center/0.0.1536.816@0.0.1536.816" timestamp="1749816953004" />
-    <state width="1024" height="228" key="GridCell.Tab.2.left" timestamp="1749816953004">
+    <state width="1024" height="231" key="GridCell.Tab.2.center/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
+    <state width="1024" height="231" key="GridCell.Tab.2.left" timestamp="1750774327304">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="228" key="GridCell.Tab.2.left/0.0.1536.816@0.0.1536.816" timestamp="1749816953004" />
-    <state width="1024" height="228" key="GridCell.Tab.2.right" timestamp="1749816953004">
+    <state width="1024" height="231" key="GridCell.Tab.2.left/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
+    <state width="1024" height="231" key="GridCell.Tab.2.right" timestamp="1750774327304">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="228" key="GridCell.Tab.2.right/0.0.1536.816@0.0.1536.816" timestamp="1749816953004" />
+    <state width="1024" height="231" key="GridCell.Tab.2.right/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
+    <state x="429" y="106" key="NewModule_or_Project.wizard" timestamp="1750767239937">
+      <screen x="0" y="0" width="1536" height="816" />
+    </state>
+    <state x="429" y="106" key="NewModule_or_Project.wizard/0.0.1536.816@0.0.1536.816" timestamp="1750767239937" />
     <state x="494" y="130" key="RollbackChangesDialog" timestamp="1750579935309">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
     <state x="494" y="130" key="RollbackChangesDialog/0.0.1536.816@0.0.1536.816" timestamp="1750579935309" />
-    <state x="270" y="0" key="SettingsEditor" timestamp="1749992588226">
+    <state x="270" y="0" key="SettingsEditor" timestamp="1750767241903">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state x="270" y="0" key="SettingsEditor/0.0.1536.816@0.0.1536.816" timestamp="1749992588226" />
+    <state x="270" y="0" key="SettingsEditor/0.0.1536.816@0.0.1536.816" timestamp="1750767241903" />
     <state x="447" y="7" width="642" height="801" key="find.popup" timestamp="1750508805561">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
     <state x="447" y="7" width="642" height="801" key="find.popup/0.0.1536.816@0.0.1536.816" timestamp="1750508805561" />
-    <state x="356" y="183" key="new project wizard" timestamp="1749815997265">
+    <state x="356" y="183" key="new project wizard" timestamp="1750767043693">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state x="356" y="183" key="new project wizard/0.0.1536.816@0.0.1536.816" timestamp="1749815997265" />
+    <state x="356" y="183" key="new project wizard/0.0.1536.816@0.0.1536.816" timestamp="1750767043693" />
     <state x="425" y="185" key="run.anything.popup" timestamp="1750510608104">
       <screen x="0" y="0" width="1536" height="816" />
     </state>

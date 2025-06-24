@@ -15,7 +15,11 @@ spring:
     password: THULqamnbVa3RWL4
 
 eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 5   # 心跳间隔
+    lease-expiration-duration-in-seconds: 10  # 过期时间
   client:
+    registry-fetch-interval-seconds: 5      # 获取服务列表间隔
     service-url:
       defaultZone: http://localhost:7001/eureka
 

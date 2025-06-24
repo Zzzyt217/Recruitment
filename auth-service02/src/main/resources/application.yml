@@ -1,0 +1,22 @@
+server:
+  port: 8011
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/recruitment?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  mail:
+    host: smtp.163.com
+    username: zzzyt217@163.com
+    password: THULqamnbVa3RWL4
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+
