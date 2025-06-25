@@ -372,12 +372,14 @@
         }
 
         function parseJwt(token) {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                return JSON.parse(window.atob(base64));
+            } catch (e) {
+                console.error('解析token失败:', e);
+                return null;
+            }
         }
 
         function setupAxiosDefaults(token, userId) {
@@ -389,7 +391,7 @@
             if (message) {
                 alert(message);
             }
-            window.location.href = '/auth/login';
+            window.location.href = '/auth/index';
         }
 
         function setupAddPositionButton() {
@@ -538,28 +540,38 @@
 
         function deletePosition(positionId) {
             if (confirm('确定要删除这个职位吗？此操作不可恢复！')) {
-                // 获取用户ID和令牌
-                const userId = localStorage.getItem('userId');
                 const token = localStorage.getItem('token');
+                const payload = parseJwt(token);
                 
-                // 设置请求头
-                axios.defaults.headers.common['userId'] = userId;
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                
-                axios.delete(`/company/api/positions/${positionId}`)
-                    .then(response => {
-                        if (response.data.success) {
-                            alert('职位已成功删除');
-                            // 重新加载职位列表
-                            loadPositions();
-                        } else {
-                            alert(response.data.message || '删除失败，请重试');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('删除职位时出错:', error);
+                if (!payload || !payload.id) {
+                    alert('登录信息已失效，请重新登录');
+                    redirectToLogin();
+                    return;
+                }
+
+                axios.delete(`/company/api/positions/${positionId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'userId': payload.id
+                    }
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        alert('职位已成功删除');
+                        // 重新加载职位列表
+                        loadPositions();
+                    } else {
+                        alert(response.data.message || '删除失败，请重试');
+                    }
+                })
+                .catch(error => {
+                    console.error('删除职位时出错:', error);
+                    if (error.response && error.response.status === 401) {
+                        redirectToLogin();
+                    } else {
                         alert('删除失败，请重试');
-                    });
+                    }
+                });
             }
         }
 

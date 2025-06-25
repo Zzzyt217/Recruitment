@@ -357,15 +357,15 @@
         </div>
 
         <div class="filter-section">
-            <form class="filter-form" id="filterForm">
+            <form class="filter-form" id="filterForm" onsubmit="return handleFilter(event)">
                 <div class="form-group">
                     <label for="statusFilter">状态筛选</label>
                     <select id="statusFilter" name="status">
-                        <option value="">全部状态</option>
-                        <option value="PENDING">待处理</option>
-                        <option value="REVIEWING">审核中</option>
-                        <option value="ACCEPTED">已通过</option>
-                        <option value="REJECTED">已拒绝</option>
+                        <option value="" th:selected="${selectedStatus == null}">全部状态</option>
+                        <option value="APPLIED" th:selected="${selectedStatus == 'APPLIED'}">已申请</option>
+                        <option value="INTERVIEW" th:selected="${selectedStatus == 'INTERVIEW'}">面试中</option>
+                        <option value="REJECTED" th:selected="${selectedStatus == 'REJECTED'}">已拒绝</option>
+                        <option value="OFFER" th:selected="${selectedStatus == 'OFFER'}">已录用</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -391,15 +391,11 @@
                         </p>
                     </div>
                     <div th:class="'application-status ' + 
-                        ${app['status'] == 'PENDING' || app['status'] == 'pending' || app['status'] == 'APPLIED' || app['status'] == 'applied' ? 'status-pending' : 
-                         app['status'] == 'REVIEWING' || app['status'] == 'reviewing' ? 'status-reviewing' :
-                         app['status'] == 'ACCEPTED' || app['status'] == 'accepted' || app['status'] == 'OFFER' || app['status'] == 'offer' ? 'status-accepted' : 
+                        ${app['status'] == 'APPLIED' || app['status'] == 'applied' ? 'status-pending' : 
                          app['status'] == 'INTERVIEW' || app['status'] == 'interview' ? 'status-reviewing' :
+                         app['status'] == 'OFFER' || app['status'] == 'offer' ? 'status-accepted' : 
                          'status-rejected'}">
-                        <span th:text="${app['status'] == 'PENDING' || app['status'] == 'pending' ? '待处理' :
-                                      app['status'] == 'REVIEWING' || app['status'] == 'reviewing' ? '审核中' :
-                                      app['status'] == 'ACCEPTED' || app['status'] == 'accepted' ? '已通过' :
-                                      app['status'] == 'APPLIED' || app['status'] == 'applied' ? '已申请' :
+                        <span th:text="${app['status'] == 'APPLIED' || app['status'] == 'applied' ? '已申请' :
                                       app['status'] == 'INTERVIEW' || app['status'] == 'interview' ? '面试中' :
                                       app['status'] == 'OFFER' || app['status'] == 'offer' ? '已录用' :
                                       app['status'] == 'REJECTED' || app['status'] == 'rejected' ? '已拒绝' : app['status']}">状态</span>
@@ -407,30 +403,29 @@
                 </div>
                 
                 <div class="application-actions">
-                    <button th:if="${app['status'] == 'PENDING' || app['status'] == 'pending' || app['status'] == 'APPLIED' || app['status'] == 'applied'}" 
-                            class="action-button accept-button"
-                            th:onclick="'updateStatus(' + ${app['id']} + ', \'ACCEPTED\')'">
-                        <i class="fas fa-check"></i> 通过
-                    </button>
-                    <button th:if="${app['status'] == 'PENDING' || app['status'] == 'pending' || app['status'] == 'APPLIED' || app['status'] == 'applied'}" 
-                            class="action-button reject-button"
-                            th:onclick="'updateStatus(' + ${app['id']} + ', \'REJECTED\')'">
-                        <i class="fas fa-times"></i> 拒绝
-                    </button>
-                    <button th:if="${app['status'] == 'ACCEPTED' || app['status'] == 'accepted'}" 
+                    <button th:if="${app['status'] == 'APPLIED' || app['status'] == 'applied'}" 
                             class="action-button accept-button"
                             th:onclick="'updateStatus(' + ${app['id']} + ', \'INTERVIEW\')'">
                         <i class="fas fa-user-tie"></i> 面试
+                    </button>
+                    <button th:if="${app['status'] == 'APPLIED' || app['status'] == 'applied'}" 
+                            class="action-button reject-button"
+                            th:onclick="'updateStatus(' + ${app['id']} + ', \'REJECTED\')'">
+                        <i class="fas fa-times"></i> 拒绝
                     </button>
                     <button th:if="${app['status'] == 'INTERVIEW' || app['status'] == 'interview'}" 
                             class="action-button accept-button"
                             th:onclick="'updateStatus(' + ${app['id']} + ', \'OFFER\')'">
                         <i class="fas fa-file-signature"></i> 录用
                     </button>
-                    <button class="action-button detail-button"
-                            th:onclick="'viewDetail(' + ${app['id']} + ')'">
-                        <i class="fas fa-eye"></i> 查看详情
+                    <button th:if="${app['status'] == 'INTERVIEW' || app['status'] == 'interview'}" 
+                            class="action-button reject-button"
+                            th:onclick="'updateStatus(' + ${app['id']} + ', \'REJECTED\')'">
+                        <i class="fas fa-times"></i> 拒绝
                     </button>
+                    <a href="javascript:void(0);" class="action-button detail-button" th:onclick="'viewResume(' + ${app['userId']} + ')'">
+                        <i class="fas fa-file-alt"></i> 查看简历
+                    </a>
                 </div>
             </div>
         </div>
@@ -439,43 +434,88 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
     <script>
+        // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 验证JWT token
+            setupAxiosDefaults();
+        });
+
+        // 设置axios默认值
+        function setupAxiosDefaults() {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('请先登录！');
-                window.location.href = '/auth/login';
+                window.location.href = '/auth/index';
                 return;
             }
 
-            // 从token中解析用户ID
+            const payload = parseJwt(token);
+            if (!payload || !payload.id) {
+                window.location.href = '/auth/index';
+                return;
+            }
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            axios.defaults.headers.common['userId'] = payload.id;
+        }
+
+        // 解析JWT token
+        function parseJwt(token) {
             try {
                 const base64Url = token.split('.')[1];
                 const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                
-                const decodedToken = JSON.parse(jsonPayload);
-                const userId = decodedToken.id;
-
-                if (!userId || userId === 'undefined') {
-                    alert('无法获取用户ID，请重新登录');
-                    window.location.href = '/auth/login';
-                    return;
-                }
-                
-                // 设置请求头中的用户ID和授权信息
-                axios.defaults.headers.common['userId'] = userId;
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                
-            } catch (error) {
-                console.error('Token解析错误:', error);
-                alert('登录信息无效，请重新登录');
-                window.location.href = '/auth/login';
-                return;
+                return JSON.parse(window.atob(base64));
+            } catch (e) {
+                console.error('解析token失败:', e);
+                return null;
             }
-        });
+        }
+
+        // 处理筛选表单提交
+        function handleFilter(event) {
+            event.preventDefault();
+            const status = document.getElementById('statusFilter').value;
+            
+            // 获取token和userId
+            const token = localStorage.getItem('token');
+            const payload = parseJwt(token);
+            
+            if (!token || !payload || !payload.id) {
+                window.location.href = '/auth/index';
+                return false;
+            }
+
+            // 构建请求URL
+            let url = '/company/applications';
+            if (status) {
+                url += `?status=${status}`;
+            }
+
+            // 发送请求
+            axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'userId': payload.id
+                }
+            })
+            .then(response => {
+                // 更新页面内容
+                document.open();
+                document.write(response.data);
+                document.close();
+                // 更新URL，保持筛选状态
+                const newUrl = status ? `/company/applications?status=${status}` : '/company/applications';
+                history.pushState({}, '', newUrl);
+            })
+            .catch(error => {
+                console.error('筛选失败:', error);
+                if (error.response && error.response.status === 401) {
+                    window.location.href = '/auth/index';
+                } else {
+                    alert('筛选失败，请重试');
+                }
+            });
+
+            return false;
+        }
 
         function updateStatus(applicationId, status) {
             let statusText = '';
@@ -555,20 +595,58 @@
             }
         }
 
-        function viewDetail(applicationId) {
-            alert('申请详情功能即将上线，敬请期待！');
-        }
+        // 查看简历函数
+        function viewResume(userId) {
+            // 获取token
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('未找到登录信息，请重新登录');
+                window.location.href = '/auth/login';
+                return;
+            }
 
-        // 筛选表单提交
-        document.getElementById('filterForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const status = document.getElementById('statusFilter').value;
-            
-            let url = '/company/applications?';
-            if (status) url += 'status=' + status;
-            
-            window.location.href = url;
-        });
+            // 解析token获取userId
+            const payload = parseJwt(token);
+            if (!payload || !payload.id) {
+                alert('登录信息无效，请重新登录');
+                window.location.href = '/auth/login';
+                return;
+            }
+
+            // 设置请求头
+            const headers = new Headers();
+            headers.append('Authorization', `Bearer ${token}`);
+            headers.append('userId', payload.id);
+
+            // 发送请求
+            fetch(`/company/view-resume/${userId}`, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('请求失败');
+                }
+            })
+            .then(html => {
+                if (html) {
+                    // 替换当前页面内容
+                    document.open();
+                    document.write(html);
+                    document.close();
+                    history.pushState({}, '', `/company/view-resume/${userId}`);
+                }
+            })
+            .catch(error => {
+                console.error('查看简历时出错:', error);
+                alert('查看简历失败，请稍后再试');
+            });
+        }
     </script>
 </body>
 </html> 

@@ -17,4 +17,8 @@ public interface ResumeMapper {
     // 更新简历
     @Update("UPDATE resume SET name = #{name}, phone = #{phone}, desired_position = #{desiredPosition}, education = #{education}, experience = #{experience}, skills = #{skills} WHERE id = #{id}")
     int updateResume(JobseekerResume resume);
+
+    // 统计所有求职者数量
+    @Select("SELECT COUNT(*) FROM resume")
+    Integer countAll();
 } 

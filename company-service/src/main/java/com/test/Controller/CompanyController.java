@@ -3,6 +3,7 @@ package com.test.Controller;
 import com.test.Mapper.CompanyMapper;
 import com.test.Pojo.Company;
 import com.test.Client.RecruitmentClient;
+import com.test.Client.JobseekerClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,9 @@ public class CompanyController {
     @Resource
     private RecruitmentClient recruitmentClient;
 
+    @Resource
+    private JobseekerClient jobseekerClient;
+
     // 增加根路径访问，重定向到company-profile
     @GetMapping("/")
     public String root() {
@@ -36,14 +40,15 @@ public class CompanyController {
 
     // 申请管理页面
     @GetMapping("/applications")
-    public String applications(HttpServletRequest request, Model model) {
+    public String applications(HttpServletRequest request, Model model, 
+                             @RequestParam(required = false) String status) {
         // 获取Authorization header
         String authHeader = request.getHeader("Authorization");
         String userIdStr = request.getHeader("userId");
         
         // 验证token
         if (authHeader == null || !authHeader.startsWith("Bearer ") || userIdStr == null || userIdStr.isEmpty()) {
-            return "redirect:/auth/login";
+            return "redirect:/auth/index";
         }
 
         try {
@@ -69,47 +74,29 @@ public class CompanyController {
             
             if (response != null && response.getBody() != null) {
                 List<Map<String, Object>> applications = response.getBody();
+                
+                // 如果指定了状态，进行筛选
+                if (status != null && !status.isEmpty()) {
+                    applications = applications.stream()
+                        .filter(app -> {
+                            String appStatus = String.valueOf(app.get("status")).toUpperCase();
+                            return appStatus.equals(status.toUpperCase());
+                        })
+                        .collect(java.util.stream.Collectors.toList());
+                }
+                
                 model.addAttribute("applicationList", applications);
+                // 将当前选中的状态添加到模型中
+                model.addAttribute("selectedStatus", status);
             } else {
                 model.addAttribute("applicationList", java.util.Collections.emptyList());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/auth/login";
+            return "redirect:/auth/index";
         }
         
         return "applications";
-    }
-
-    // 申请详情页面
-    @GetMapping("/applications/{id}")
-    public String applicationDetail(@PathVariable Long id, HttpServletRequest request, Model model) {
-        // 获取Authorization header
-        String authHeader = request.getHeader("Authorization");
-        String userIdStr = request.getHeader("userId");
-        
-        // 验证token
-        if (authHeader == null || !authHeader.startsWith("Bearer ") || userIdStr == null || userIdStr.isEmpty()) {
-            return "redirect:/auth/login";
-        }
-
-        try {
-            // 获取申请详情
-            Map<String, Object> application = recruitmentClient.getApplicationById(
-                authHeader,
-                userIdStr,
-                id
-            );
-            
-            // 将申请详情添加到model中
-            model.addAttribute("application", application);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "redirect:/applications";
-        }
-        
-        return "application-detail";
     }
 
     // 更新申请状态
@@ -297,5 +284,53 @@ public class CompanyController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    // 查看求职者简历
+    @GetMapping("/view-resume/{userId}")
+    public String viewResume(@PathVariable("userId") Integer userId, Model model, HttpServletRequest request) {
+        // 获取Authorization header
+        String authHeader = request.getHeader("Authorization");
+        String companyUserIdStr = request.getHeader("userId");
+        
+        // 添加请求头调试日志
+        System.out.println("Authorization header: " + (authHeader != null ? authHeader.substring(0, Math.min(20, authHeader.length())) + "..." : "null"));
+        System.out.println("userId header: " + companyUserIdStr);
+        
+        // 验证token
+        if (authHeader == null || !authHeader.startsWith("Bearer ") || companyUserIdStr == null || companyUserIdStr.isEmpty()) {
+            System.out.println("验证失败，重定向到登录页面");
+            return "redirect:/auth/login";
+        }
+
+        try {
+            System.out.println("开始调用jobseekerClient.getResumeByUserId, userId: " + userId);
+            // 使用JobseekerClient直接获取求职者简历
+            ResponseEntity<Object> responseEntity = jobseekerClient.getResumeByUserId(userId);
+            
+            // 添加调试日志
+            System.out.println("获取到的简历信息: " + responseEntity);
+            System.out.println("响应状态码: " + responseEntity.getStatusCode());
+            
+            // 处理响应
+            if (responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.getBody() != null) {
+                // 将简历信息直接添加到模型中
+                model.addAttribute("resume", responseEntity.getBody());
+                System.out.println("简历信息已添加到模型");
+            } else {
+                model.addAttribute("resume", null);
+                model.addAttribute("errorMessage", "无法获取简历信息");
+                System.out.println("响应成功但简历为空");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("获取简历信息时出错: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("resume", null);
+            model.addAttribute("errorMessage", "获取简历信息时出错: " + e.getMessage());
+        }
+        
+        System.out.println("返回view-resume视图");
+        return "view-resume";
     }
 } 

@@ -30,6 +30,7 @@ public class ResumeController {
         return "resume";
     }
 
+
     @GetMapping("/profile")
     public String profile(HttpServletRequest request, Model model) {
         // 获取Authorization header

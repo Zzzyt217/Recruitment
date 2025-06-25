@@ -51,6 +51,13 @@ public class FallbackController {
         return createFallbackResponse("求职者服务暂时不可用，请稍后重试");
     }
 
+    @GetMapping("/fallback/company")
+    public Mono<ResponseEntity<Map<String, Object>>> companyFallback(ServerWebExchange exchange) {
+        Exception exception = exchange.getAttribute(ErrorAttributes.ERROR_ATTRIBUTE);
+        log.error("Company service fallback triggered. Error: ", exception);
+        return createFallbackResponse("企业服务暂时不可用，请稍后重试");
+    }
+
     private Mono<ResponseEntity<Map<String, Object>>> createFallbackResponse(String message) {
         Map<String, Object> result = new HashMap<>();
         result.put("code", 503);

@@ -364,28 +364,28 @@
             <div class="stat-icon blue">
                 <i class="fas fa-briefcase"></i>
             </div>
-            <div class="stat-value">1024</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">热门职位</div>
         </div>
         <div class="stat-card animate delay-2">
             <div class="stat-icon green">
                 <i class="fas fa-building"></i>
             </div>
-            <div class="stat-value">328</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">知名企业</div>
         </div>
         <div class="stat-card animate delay-3">
             <div class="stat-icon orange">
                 <i class="fas fa-user-tie"></i>
             </div>
-            <div class="stat-value">5680</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">活跃求职者</div>
         </div>
         <div class="stat-card animate delay-4">
             <div class="stat-icon red">
                 <i class="fas fa-handshake"></i>
             </div>
-            <div class="stat-value">896</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">成功招聘</div>
         </div>
     </div>
@@ -962,6 +962,101 @@
         // 显示弹窗
         alert('数据分析功能即将上线，敬请期待！');
     });
+
+    // 获取并显示统计数据
+    function fetchStats() {
+        console.log('开始执行fetchStats函数...');
+        
+        // 从JWT中获取用户ID
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('未找到token，无法获取统计数据');
+            return;
+        }
+
+        try {
+            // 解析JWT获取用户ID
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join('')));
+            
+            const userId = payload.id;
+            console.log('从JWT中解析出用户ID:', userId);
+            console.log('token长度:', token.length);
+            
+            // 调用analytics-service API获取仪表盘统计数据
+            console.log('准备调用API: /api/analytics/dashboard');
+            console.log('请求头: Authorization=Bearer ' + token.substring(0, 10) + '... 和 UserId=' + userId);
+            
+            // 使用原生AJAX请求
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/analytics/dashboard', true);
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('UserId', userId);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log('API调用成功!');
+                    const stats = JSON.parse(xhr.responseText);
+                    console.log('获取到的统计数据:', stats);
+                    
+                    // 更新统计卡片的值
+                    const statValues = document.querySelectorAll('.stat-value');
+                    statValues[0].textContent = stats.totalPositions || '0';     // 职位数
+                    statValues[1].textContent = stats.totalCompanies || '0';     // 企业数
+                    statValues[2].textContent = stats.totalJobseekers || '0';    // 求职者数
+                    statValues[3].textContent = stats.totalSuccessfulHires || '0'; // 成功招聘数
+                    
+                    console.log('统计数据已更新到页面');
+                } else {
+                    console.error('获取统计数据失败:', xhr.status);
+                    console.error('错误详情:', xhr.responseText);
+                    
+                    // 设置默认值
+                    document.querySelectorAll('.stat-value').forEach(el => {
+                        el.textContent = '0';
+                    });
+                    
+                    console.log('已设置默认值0');
+                }
+            };
+            
+            xhr.onerror = function() {
+                console.error('请求出错');
+                console.error('获取统计数据失败');
+                
+                // 设置默认值
+                document.querySelectorAll('.stat-value').forEach(el => {
+                    el.textContent = '0';
+                });
+                
+                console.log('已设置默认值0');
+            };
+            
+            xhr.send();
+        } catch (error) {
+            console.error('JWT解析失败:', error);
+        }
+    }
+
+    // 页面加载时获取统计数据
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('页面加载完成，正在获取统计数据...');
+        fetchStats();
+        
+        // 为了确保数据加载，可以在短暂延迟后再次尝试获取
+        setTimeout(function() {
+            console.log('再次尝试获取统计数据...');
+            fetchStats();
+        }, 1000);
+    });
+
+    // 立即执行一次
+    console.log('尝试立即获取统计数据');
+    fetchStats();
 </script>
 </body>
 </html> 
