@@ -9,7 +9,7 @@ public class Application {
     private Long companyId;
     private Long resumeId;
     private String coverLetter;
-    private String status; // APPLIED, REVIEWING, INTERVIEW, OFFER, REJECTED, ACCEPTED, WITHDRAWN
+    private String status; // APPLIED, REVIEWING, INTERVIEW, OFFER, REJECTED, ACCEPTED
     private Date createdAt;
     private Date updatedAt;
     

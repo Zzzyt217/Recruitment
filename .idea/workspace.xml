@@ -11,30 +11,29 @@
       <change afterPath="$PROJECT_DIR$/../springcloud/mvnw" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../springcloud/mvnw.cmd" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../springcloud/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analytics-service/analytics-service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/analytics-service.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analytics-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analytics-service/src/main/java/com/test/AnalyticsServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/src/main/java/com/test/AnalyticsServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analytics-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/META-INF/analytics-service.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/AnalyticsServiceApplication$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/AnalyticsServiceApplication$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/AnalyticsServiceApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/AnalyticsServiceApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/target/classes/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/com/test/Controller/CompanyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/com/test/Controller/CompanyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/com/test/Controller/PositionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/com/test/Controller/PositionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/com/test/Mapper/CompanyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/com/test/Mapper/CompanyMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/templates/applications.html" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/templates/applications.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/templates/position-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/templates/position-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/target/classes/com/test/Controller/CompanyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/target/classes/com/test/Controller/CompanyController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/target/classes/templates/applications.html" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/target/classes/templates/applications.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/target/classes/templates/position-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/target/classes/templates/position-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-service/src/main/java/com/test/gateway/Controller/FallbackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/src/main/java/com/test/gateway/Controller/FallbackController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-service/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Client/CompanyClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Client/CompanyClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Client/JobseekerClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Client/JobseekerClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Client/RecruitmentClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Client/RecruitmentClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Controller/AnalyticsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Controller/AnalyticsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Pojo/DashboardStatsDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Pojo/DashboardStatsDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Service/Impl/AnalyticsServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/target/classes/com/test/Service/Impl/AnalyticsServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service02/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service02/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service02/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service02/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/target/classes/com/test/Controller/StatsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/target/classes/com/test/Controller/StatsController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/Controller/FallbackController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/Controller/FallbackController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobseeker-service/src/main/java/com/test/Controller/ResumeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/jobseeker-service/src/main/java/com/test/Controller/ResumeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobseeker-service/src/main/java/com/test/Mapper/ResumeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/jobseeker-service/src/main/java/com/test/Mapper/ResumeMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobseeker-service/target/classes/com/test/Controller/ResumeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/jobseeker-service/target/classes/com/test/Controller/ResumeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/Filter/AuthFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/target/classes/com/test/gateway/Filter/AuthFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobseeker-service/target/classes/com/test/Controller/StatsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/jobseeker-service/target/classes/com/test/Controller/StatsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobseeker-service/target/classes/com/test/Mapper/ResumeMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/jobseeker-service/target/classes/com/test/Mapper/ResumeMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruitment-service/src/main/java/com/test/Pojo/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/src/main/java/com/test/Pojo/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Controller/ApplicationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Controller/ApplicationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Controller/StatsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Controller/StatsController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Mapper/ApplicationMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Mapper/ApplicationMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Pojo/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Pojo/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/RecruitmentServiceApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/RecruitmentServiceApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Service/ApplicationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Service/ApplicationService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Service/Impl/ApplicationServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment-service/target/classes/com/test/Service/Impl/ApplicationServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -255,11 +254,6 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
                 <item name="Finished" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
             </expand>
@@ -314,7 +308,10 @@
       <workItem from="1750768924870" duration="6125000" />
       <workItem from="1750812190901" duration="11657000" />
       <workItem from="1750832862870" duration="4575000" />
-      <workItem from="1750837553473" duration="10273000" />
+      <workItem from="1750837553473" duration="10722000" />
+      <workItem from="1750900613281" duration="5618000" />
+      <workItem from="1750912434625" duration="233000" />
+      <workItem from="1750917608627" duration="2243000" />
     </task>
     <servers />
   </component>
@@ -358,54 +355,54 @@
       <screen x="0" y="0" width="1536" height="816" />
     </state>
     <state x="549" y="163" key="FileChooserDialogImpl/0.0.1536.816@0.0.1536.816" timestamp="1750767186522" />
-    <state width="1024" height="302" key="GridCell.Tab.0.bottom" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.0.bottom" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.0.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.0.center" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.0.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.0.center" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.0.center/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.0.left" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.0.center/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.0.left" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.0.left/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.0.right" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.0.left/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.0.right" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.0.right/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.1.bottom" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.0.right/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.1.bottom" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.1.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.1.center" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.1.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.1.center" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.1.center/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.1.left" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.1.center/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.1.left" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.1.left/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="302" key="GridCell.Tab.1.right" timestamp="1750847883541">
+    <state width="1024" height="293" key="GridCell.Tab.1.left/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="293" key="GridCell.Tab.1.right" timestamp="1750921982962">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="302" key="GridCell.Tab.1.right/0.0.1536.816@0.0.1536.816" timestamp="1750847883541" />
-    <state width="1024" height="231" key="GridCell.Tab.2.bottom" timestamp="1750774327304">
+    <state width="1024" height="293" key="GridCell.Tab.1.right/0.0.1536.816@0.0.1536.816" timestamp="1750921982962" />
+    <state width="1024" height="314" key="GridCell.Tab.2.bottom" timestamp="1750905939397">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="231" key="GridCell.Tab.2.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
-    <state width="1024" height="231" key="GridCell.Tab.2.center" timestamp="1750774327304">
+    <state width="1024" height="314" key="GridCell.Tab.2.bottom/0.0.1536.816@0.0.1536.816" timestamp="1750905939397" />
+    <state width="1024" height="314" key="GridCell.Tab.2.center" timestamp="1750905939397">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="231" key="GridCell.Tab.2.center/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
-    <state width="1024" height="231" key="GridCell.Tab.2.left" timestamp="1750774327304">
+    <state width="1024" height="314" key="GridCell.Tab.2.center/0.0.1536.816@0.0.1536.816" timestamp="1750905939397" />
+    <state width="1024" height="314" key="GridCell.Tab.2.left" timestamp="1750905939397">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="231" key="GridCell.Tab.2.left/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
-    <state width="1024" height="231" key="GridCell.Tab.2.right" timestamp="1750774327304">
+    <state width="1024" height="314" key="GridCell.Tab.2.left/0.0.1536.816@0.0.1536.816" timestamp="1750905939397" />
+    <state width="1024" height="314" key="GridCell.Tab.2.right" timestamp="1750905939397">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
-    <state width="1024" height="231" key="GridCell.Tab.2.right/0.0.1536.816@0.0.1536.816" timestamp="1750774327304" />
+    <state width="1024" height="314" key="GridCell.Tab.2.right/0.0.1536.816@0.0.1536.816" timestamp="1750905939397" />
     <state x="349" y="151" key="IDE.errors.dialog" timestamp="1750814528805">
       <screen x="0" y="0" width="1536" height="816" />
     </state>
